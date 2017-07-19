@@ -19,8 +19,11 @@ Python现在有两个大的版本，2和3；现在几乎全部的package都支�
 我们经常会用到的几个package:
 
 - numpy（提供矩阵、数组操作）
+  [numpy manual](https://docs.scipy.org/doc/numpy/)
 - matplotlib（画图）
+  [matplotlib User's Guide](http://matplotlib.org/users/index.html)
 - scipy（包括许多科学计算的工具，例如差值、最优化等）
+  [scipy tutorial](https://docs.scipy.org/doc/scipy/reference/tutorial/index.html)
 
 ### CMake(编译配置工具)
 
@@ -28,13 +31,20 @@ Python现在有两个大的版本，2和3；现在几乎全部的package都支�
 
 ### git(代码管理工具)
 
-可以了解一下github
+- 注册github
+
+[github学生优惠](https://education.github.com/pack) 可以免费建立private项目
 
 ## 文档
 
 [Python官方教程（英文）](https://docs.python.org/3/tutorial/index.html)
+
 [Python简明教程](docs/A-Byte-of-Python3_zh.pdf)
+
 [Python教程-廖雪峰](https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000)
+
 [git简单命令](http://rogerdudler.github.io/git-guide/)
+
 [git教程-廖雪峰](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000)
+
 [CMake官方教程](https://cmake.org/cmake-tutorial/)
