@@ -91,6 +91,23 @@ $$
 
 [slide]
 
+## 正演方法
+
+----
+
+- Thomson-Haskell传播矩阵方法，(Haskell, 1953)
+- Schwab-Knopoff方法，(Knopoff,1964; Schwab, 1965)
+- 广义反透射系数方法，（陈晓非，1993；凡友华，2003；何耀峰，2005）
+
+[slide]
+
+## 漏根的情况
+
+![](/figures/missing_roots_raw.png)
+
+
+[slide]
+
 ## 反演方法
 
 - 基于导数的单点反演方法
@@ -151,41 +168,65 @@ $$
 
 [magic]
 
-## 1.初始化族群 
+### 1.初始化族群 
 
 ![](/figures/de_initialize.png)
 
 ====
 
-## 2.产生扰动 
+### 2.产生扰动 
 
 ![](/figures/de_generate_perturbation.png)
 
 ====
 
-## 3.变异产生新个体
+### 3.变异产生新个体
 
 ![](/figures/de_mutation.png)
 
 =====
 
-## 4.挑选，接受新个体 
+### 4.挑选，接受新个体 
 
 ![](/figures/de_selection.png)
 
 ====
 
-## 5.新一次变异产生新个体
+### 5.新一次变异产生新个体
 
 ![](/figures/de_new_population.png)
 
 ====
 
-## 6.挑选，拒绝新个体
+### 6.挑选，拒绝新个体
 
 ![](/figures/de_selection2.png)
 
 [/magic]
+
+[slide]
+
+## 密度与P波速度的影响
+
+| layer | density(a) | Vp(a) | density(b) | Vp(b) |
+| :---: |      :---: | :---: |      :---: | :---: |
+|     1 |       1.78 |   1.5 |        1.8 |   1.7 |
+|     2 |       1.85 |   1.7 |        1.8 |   1.7 |
+|     3 |       1.80 |   1.6 |        1.8 |   1.7 |
+|     4 |       1.93 |   2.0 |        1.8 |   1.7 |
+
+![](/figures/a_same_b_diff_vp_rho.png)
+
+[note]
+
+ Xia et al. (1999), Knopoff’s method 
+ 
+ - Vs 25% -> Vr by 39%. 
+ - density 25% -> Vr by less than 10%.
+ - Vp -> less effect (3%).
+
+
+[/note]
 
 [slide]
 
@@ -260,3 +301,7 @@ $$
 ## 编程要求
 
 - python
+
+[slide]
+
+# 谢谢
