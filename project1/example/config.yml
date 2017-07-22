@@ -1,0 +1,18 @@
+---
+# basic parameters
+nx: 40
+ny: 40
+ns: 20
+nr: 20
+nsampling: 4 # sampling inverval
+
+# data
+source: [[1, 1], [1, 39], [0, 2]]
+receiver: [[39, 1], [39, 39], [0, 2]]
+model: checkboard
+
+checkboard:
+  nx: 3
+  ny: 3
+  vref: 0.15
+  vmax: 0.003
