@@ -1,27 +1,45 @@
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "all"} } });
-</script>
-
-
 # Project1
 
-## 具体内容
+## 提前内容
 
-1. 安装pygmo库
+1. 安装pygmo库（提供更快的DE算法支持）
+   1. 更换conda源为清华源
+   ```bash
+   > conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+   > conda config --set show_channel_urls yes
+   > conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+   ```
+   2. 安装pagmo（pygmo依赖的C++库）
+   ```bash
+   > conda install pagmo
+   ```
+   3. 安装pygmo
+   ```bash
+   > conda install pygmo
+   ```
 
 2. 下载代码
 
-   ```
+   ```bash
    > git clone https://github.com/panlei7/summer-project.git
    ```
    如果没有git命令，可以安一个
-   ```
+   ```bash
    > sudo apt-get install git
    ```
 
    反演程序来自scipy和pygmo，正演我已经提供了，我已经写好了一个检测板模型的例子，你们可以参考一下
 
 3. 具体怎么执行，还有参数的设定问题，到时候课上会讲，写起来太费劲，自己可以摸索试一下
+
+
+用到的几个函数，特别是第一个可以重点看看：
+
+[scipy.optimize.minimize](https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize)
+
+[scipy.optimize.differential_evolution](https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.differential_evolution.html#scipy.optimize.differential_evolution)
+
+pygmo相对复杂一些，而且这个例子并不是很适合，暂时不需要了解
 
 ## 解释
 
@@ -48,78 +66,24 @@
 
 [Bresenham's algorithm](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm)
 
-![一个例子](figures/Bresenham.svg)
-
-
 
 ### 目标函数和梯度
 
-这个有很多名字，例如misfit function, fitness function, object function等，但都是一个东西，它是用来衡量反演模型产生的合成数据与观测数据之间差别的函数。所有的反演方法都需要先定义一个目标函数，才能进行各种策略，最终获得一个满意的反演模型。
+发现直接在这写公式显示不出来，可以看[这里](http://panlei.me/2017/07/22/misfit-function-and-gradient/)
 
-- 数据模型（我们不知道，例如地下什么结构，这个是我们不知道的）
-- 观测数据（我们可以获得或观测到，例如地震波的到时，之前我讲过的面波频散曲线）
-- 反演模型（我们在反演过程中得到的模型，它可以看作是对实际的数据模型的假设、猜测）
-- 合成数据（根据反演模型正演得到的数据，它用来和观测数据比较，计算出目标函数）
 
-反演里的梯度有时候又叫导数、核函数，它含有改进模型方向的信息。打个比方，你现在在A地点，要去B地点，你去问路人“梯度”，它会告诉你个方向，但具体要走多远，会不会走过，它并不知道，这时候需要经常看看手里的“目标函数”，就这样停停问问看看，最后你到了目的地。
+### 论文
 
-走时可以通过以下公式求得
+我觉得你们目前并不太适合看论文，因为论文往往会略过许多基础知识，等以后上过专业课再说，但还是贴出来两篇文献，一篇是讲背景噪声的（但我们的方法不太一样，目前计划项目中不包括这一内容），一篇是利用高阶面波反演的。
 
-$$
-T = \int \frac{1}{c}dl
-$$
+[面波反演](surface_wave_inversion.pdf)
 
-积分是射线经过的路径，$c$是波速，$T$是走时。进行微分，得到
+[背景噪声](ambient_noise.pdf)
 
-$$
-\delta T = -\int \frac{\delta c}{c^2}dl \label{eq:1}
-$$
+如果对反演感兴趣，可以看这本书
 
-假设所有网格的集合为$S$，而利用Bresenham算法求得最短路径经过的网格集合为$S_{l}$，那么可以定义一个窗函数，满足
+[数值反演](Numerical_Optimization.pdf)
 
-$$ W(m, n) = \begin{cases} 
-1, & \text{if $(m, n)$} \in S_{l} \\\\
-0, & \text{if $(m, n)$} \in S \text{,} \notin S_{l}
-\end{cases}
-\label{eq:2}
-$$
+如果对地震学感兴趣，可以挑着看这本
 
-对公式$\eqref{eq:1}$进行离散化，并使用窗函数$\eqref{eq:2}$将沿路径的线积分转换成面积分
-
-$$
-\begin{align}
-\delta T & = -\int \frac{\delta c}{c^2}dl \nonumber \\\\
-& = -\sum_{m, n} \frac{W(m, n)}{c^2(m, n)}\delta c
-\end{align}
-$$
-
-所以kernel函数的离散形式为：
-
-$$
-k(m, n) = -\frac{W(m, n)}{c^2(m ,n)}
-$$
-
-现在定义一个目标函数：
-
-$$
-F = \frac{1}{2}\sum_{r, s}(T_{r, s} - T'_{r, s})^2 \label{eq:3}
-$$
-
-其中$T_{r,s}$是第$s$个源和第$r$个接收点对应的测量到时，而$T'_{r, s}$是数据到时。
-对上式微分得，
-
-$$
-\begin{align}
-\delta F & = \sum_{r, s}(T_{r, s} - T'_{r, s})\delta T_{r,s} \nonumber \\\\
-& = \sum_{r, s}(T_{r, s} - T'_{r, s})\sum_{m, n}k(m, n)\delta c \nonumber \\\\
-& = \sum_{m, n}\sum_{r, s}(T_{r, s}-T'_{r, s})k(m ,n)\delta c
-\end{align}
-$$
-
-所以目标函数$\eqref{eq:3}$对应的kernel函数为
-
-$$
-K(m ,n) = -\sum_{r, s}\frac{(T_{r, s}-T'_{r, s})W(m, n)}{c^2(m ,n)}
-$$
-
-这里的kernel函数就是我们需要的梯度信息。
+[地震学介绍](Introduction_to_Seismology.pdf)
