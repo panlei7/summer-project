@@ -1,5 +1,7 @@
 import numpy as np
+import pygmo as pg
 import matplotlib.pyplot as plt
+import yaml
 from forward_line import ForwardLine
 from scipy.optimize import minimize, differential_evolution
 from timer import Timer
@@ -11,36 +13,56 @@ if __name__ == "__main__":
     forward = ForwardLine('config.yml')
     model_data, _ = forward.create_data()
 
-    func = forward.get_obj
-    jac = forward.get_grad
+    func = forward.misfit
+    jac = forward.gradient
 
     x0 = forward.create_x0()
-    bounds = forward.create_bounds(0.1)
+    bounds = forward.create_bounds()
 
-    # plot the initial gradient
+    with open("config.yml", 'r') as stream:
+        config = yaml.load(stream)
+        gen = config['gen']
+        alg = config['algorithm']
 
 
     timer = Timer()
     timer.start()
 
-    alg = 3
-    if alg == 1:
+    if alg == 'CG':
         res = minimize(func, x0, method='CG', jac=jac,
-                       options={'gtol': 1e-5})
-    elif alg == 2:
+                       options={'gtol': 1e-5, 'disp': True})
+        best_x = res.x
+        best_f = res.fun
+    elif alg == 'LBFGS':
         res = minimize(func, x0, method='L-BFGS-B', jac=jac,
-                       options={'gtol': 1e-5})
-    elif alg == 3:
+                       options={'gtol': 1e-5, 'disp': True})
+        best_x = res.x
+        best_f = res.fun
+    elif alg == 'DE1':
+        # scipy's DE is too slow
         res = differential_evolution(func,
                                      bounds,
                                      strategy="best1bin",
                                      # strategy="randtobest1exp",
-                                     maxiter=2000,
+                                     maxiter=gen,
                                      popsize=5,
                                      disp=True)
+        best_x = res.x
+        best_f = res.fun
+    elif alg == 'DE2':
+        prob = pg.problem(forward)
+        algo = pg.algorithm(pg.de1220(gen=gen,
+                                      variant_adptv=2))
+        algo.set_verbosity(10)
+        isl = pg.island(algo=algo,
+                        prob=prob,
+                        size=x0.shape[0]*2)
+        isl.evolve()
+        isl.wait()
+        best_f = isl.get_population().champion_f
+        best_x = isl.get_population().champion_x
 
-    print(res.message)
-    # print(res.fun)
+
     timer.stop()
     print("elapsed time: {:14.3f} s".format(timer.elapsed))
 
@@ -52,5 +74,5 @@ if __name__ == "__main__":
         fig.plot_gradient(jac(x0))
 
     if plot_result:
-        fig.plot_result(model_data, res.x)
+        fig.plot_result(model_data, best_x)
     plt.show()

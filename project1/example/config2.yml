@@ -2,11 +2,11 @@
 # basic parameters
 nx: 40
 ny: 40
-nsampling: 1 # sampling inverval
+nsampling: 4 # sampling inverval
 
 # data
 # type_sr: point or line
-type_sr: point
+type_sr: line
 
 file_src: source.txt
 file_rec: receiver.txt
