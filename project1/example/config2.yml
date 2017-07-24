@@ -11,11 +11,12 @@ type_sr: line
 file_src: source.txt
 file_rec: receiver.txt
 
-source: [[1, 1], [39, 39], [2, 2]]
-receiver: [[1, 1], [39, 39], [2, 2]]
+source: [[1, 1], [1, 39], [0, 2]]
+receiver: [[39, 1], [39, 39], [0, 2]]
 
 
 # model
+# model: checkboard, user-defined
 model: checkboard
 
 checkboard:
@@ -23,6 +24,13 @@ checkboard:
   ny: 2
   vref: 0.15
   vmax: 0.003
+
+# user-defined:
+#   file_model: model.npy
+#   vref: 0.15
+
+# file that stores data
+file_data: data.pkl
 
 # inversion algorithm:
 #       CG
@@ -37,3 +45,8 @@ algorithm: LBFGS
 # DE paras
 bounds_percentage: 0.05
 gen: 2000
+
+# plot
+plot:
+  vref: 0.15
+  vmax: 0.003

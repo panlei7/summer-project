@@ -2,11 +2,11 @@
 # basic parameters
 nx: 40
 ny: 40
-nsampling: 1 # sampling inverval
+nsampling: 4 # sampling inverval
 
 # data
 # type_sr: point or line
-type_sr: point
+type_sr: line
 
 file_src: source.txt
 file_rec: receiver.txt
@@ -17,7 +17,7 @@ receiver: [[39, 1], [39, 39], [0, 2]]
 
 # model
 # model: checkboard, user-defined
-model: checkboard
+model: user-defined
 
 checkboard:
   nx: 2
@@ -25,9 +25,9 @@ checkboard:
   vref: 0.15
   vmax: 0.003
 
-# user-defined:
-#   file_model: model.npy
-#   vref: 0.15
+user-defined:
+  file_model: model_data.npy
+  vref: 0.15
 
 # file that stores data
 file_data: data.pkl

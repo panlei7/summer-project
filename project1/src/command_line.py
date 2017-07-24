@@ -7,11 +7,26 @@ from scipy.optimize import minimize, differential_evolution
 from timer import Timer
 import matplotlib.pyplot as plt
 from utils import Plot
+import argparse
 
 
 if __name__ == "__main__":
-    forward = ForwardLine('config.yml')
-    model_data, _ = forward.create_data()
+    parser = argparse.ArgumentParser(description="inversion procedure")
+    parser.add_argument("-c",
+                        "--config",
+                        default="config.yml",
+                        help="give the configure file")
+    parser.add_argument("--plot_gradient",
+                        action="store_true",
+                        help="whether plotting the gradient of the first step")
+    args = parser.parse_args()
+    file_config = args.config
+    flag_plot_gradient = args.plot_gradient
+
+    forward = ForwardLine(file_config)
+    model_data = forward.create_model()
+    forward.create_data()
+    # forward.load_data()
 
     func = forward.misfit
     jac = forward.gradient
@@ -19,7 +34,7 @@ if __name__ == "__main__":
     x0 = forward.create_x0()
     bounds = forward.create_bounds()
 
-    with open("config.yml", 'r') as stream:
+    with open(file_config, 'r') as stream:
         config = yaml.load(stream)
         gen = config['gen']
         alg = config['algorithm']
@@ -30,12 +45,14 @@ if __name__ == "__main__":
 
     if alg == 'CG':
         res = minimize(func, x0, method='CG', jac=jac,
-                       options={'gtol': 1e-5, 'disp': True})
+                       callback=forward.callback_print,
+                       options={'gtol': 1e-5})
         best_x = res.x
         best_f = res.fun
     elif alg == 'LBFGS':
         res = minimize(func, x0, method='L-BFGS-B', jac=jac,
-                       options={'gtol': 1e-5, 'disp': True})
+                       callback=forward.callback_print,
+                       options={'gtol': 1e-5})
         best_x = res.x
         best_f = res.fun
     elif alg == 'DE1':
@@ -66,13 +83,9 @@ if __name__ == "__main__":
     timer.stop()
     print("elapsed time: {:14.3f} s".format(timer.elapsed))
 
-    plot_gradient = 0
-    plot_result = 1
-
-    fig = Plot("config.yml")
-    if plot_gradient:
+    fig = Plot(file_config)
+    if flag_plot_gradient:
         fig.plot_gradient(jac(x0))
 
-    if plot_result:
-        fig.plot_result(model_data, best_x)
+    fig.plot_result(model_data, best_x)
     plt.show()

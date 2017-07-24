@@ -14,8 +14,8 @@ class Plot:
             config = yaml.load(stream)
         self.nx_fg = config['nx']
         self.ny_fg = config['ny']
-        self.vref = config['checkboard']['vref']
-        self.vmax = config['checkboard']['vmax']
+        self.vref = config['plot']['vref']
+        self.vmax = config['plot']['vmax']
         nsampling = config['nsampling']
         self.nx_ig = int(self.nx_fg / nsampling)
         self.ny_ig = int(self.ny_fg / nsampling)
@@ -25,9 +25,9 @@ class Plot:
         self.y_fg = np.arange(self.ny_fg)
 
     def __plot2d(self, x, y, z, title):
-        plt.pcolormesh(x, y, z, cmap='jet',
-                       vmin=self.vref-self.vmax,
-                       vmax=self.vref+self.vmax)
+        plt.pcolormesh(x, y, z, cmap='jet')
+                       # vmin=self.vref-self.vmax,
+                       # vmax=self.vref+self.vmax)
         plt.title(title)
         plt.xlim([0, self.nx_fg])
         plt.ylim([0, self.ny_fg])
@@ -45,9 +45,11 @@ class Plot:
         plt.subplot(121)
         model_data_2d = model_data.reshape(self.nx_fg, self.ny_fg)
         self.__plot2d(self.x_fg, self.y_fg, model_data_2d, "data model")
+        plt.clim(self.vref-self.vmax, self.vref+self.vmax)
         plt.subplot(122)
         model_inv_2d = model_inv.reshape(self.nx_ig, self.ny_ig)
         self.__plot2d(self.x_ig, self.y_ig, model_inv_2d, "inverted model")
+        plt.clim(self.vref-self.vmax, self.vref+self.vmax)
         fig.savefig("model.png")
 
         np.save("model_inv", model_inv_2d)
