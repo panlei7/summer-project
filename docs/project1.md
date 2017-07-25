@@ -35,8 +35,16 @@
    ```bash
    > git pull
    ```
+   
+5. 运行算例
 
-4. 如果有问题，可以在issues里面提，手机打字累-_-!
+   ```bash
+   > cd project1/example
+   > python ../src/command_line.py --help
+   > python ../src/command_line.py -c config2.yml --plot_gradient
+   ```
+
+6. 如果有问题，可以在issues里面提，手机打字累-_-!
 
 ![](figures/issues.png)
 
