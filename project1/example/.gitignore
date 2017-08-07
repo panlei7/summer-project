@@ -2,3 +2,4 @@
 *.png
 *.pkl
 *.txt
+!model2.npy
