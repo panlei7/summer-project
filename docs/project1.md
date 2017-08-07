@@ -50,6 +50,7 @@
 
    ```bash
    > cd project1/example
+   > python make_sr.py
    > python ../src/command_line.py -c config4.yml --plot_gradient
    ```
 
