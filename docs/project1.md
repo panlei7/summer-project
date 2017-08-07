@@ -46,6 +46,13 @@
 
 6. 如果有问题，可以在issues里面提，手机打字累-_-!
 
+7. 新的算例-超人
+
+   ```bash
+   > cd project1/example
+   > python ../src/command_line.py -c config4.yml --plot_gradient
+   ```
+
 ![](figures/issues.png)
 
 用到的几个函数，特别是第一个可以重点看看：
@@ -91,18 +98,19 @@ pygmo相对复杂一些，而且这个例子并不是很适合，暂时不需要
 
 我觉得你们目前并不太适合看论文，因为论文往往会略过许多基础知识，等以后上过专业课再说，但还是贴出来两篇文献，一篇是讲背景噪声的（但我们的方法不太一样，目前计划项目中不包括这一内容），一篇是利用高阶面波反演的。
 
-[面波反演](surface_wave_inversion.pdf)
+面波反演：surface_wave_inversion.pdf
 
-[背景噪声](ambient_noise.pdf)
+背景噪声：ambient_noise.pdf
 
 如果对反演感兴趣，可以看这本书
 
-[数值反演](Numerical_Optimization.pdf)
+数值反演：Numerical_Optimization.pdf
 
 如果对地震学感兴趣，可以挑着看这本
 
-[地震学介绍](Introduction_to_Seismology.pdf)
+地震学介绍：Introduction_to_Seismology.pdf
 
+链接: [百度云](https://pan.baidu.com/s/1c15fH2C) 密码: metr
 
 ## 任务
 

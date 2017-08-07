@@ -196,7 +196,7 @@ class ForwardLine:
                 t = travel_time.travel_time(slowness, points)
                 diff = t - self.data[(id_src, id_rec)]
                 idx, idy = points[:, 0], points[:, 1]
-                grad2d[idx, idy] -= diff * slowness[idx, idy]**2
+                grad2d[idy, idx] -= diff * slowness[idy, idx]**2
 
         grad2d = fg2ig_2d(grad2d, self.nsampling)
         grad = convert2dto1d(grad2d)

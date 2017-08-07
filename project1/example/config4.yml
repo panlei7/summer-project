@@ -1,0 +1,52 @@
+---
+# basic parameters
+nx: 140
+ny: 180
+nsampling: 1 # sampling inverval
+
+# data
+# type_sr: point or line
+type_sr: point
+
+file_src: source.txt
+file_rec: receiver.txt
+
+source: [[5, 5], [5, 895], [0, 20]]
+receiver: [[695, 5], [695, 895], [0, 20]]
+
+
+# model
+# model: checkboard, user-defined
+model: user-defined
+
+checkboard:
+  nx: 2
+  ny: 2
+  vref: 0.15
+  vmax: 0.003
+
+user-defined:
+  file_model: model2.npy
+  vref: 0.15
+
+# file that stores data
+file_data: data.pkl
+
+# inversion algorithm:
+#       CG
+#       LBFGS
+#       DE1
+#       DE2
+# DE1 is de from scipy (slow)
+# DE2 is de from pygmo
+#
+algorithm: LBFGS
+
+# DE paras
+bounds_percentage: 0.05
+gen: 2000
+
+# plot
+plot:
+  vref: 0.15
+  vmax: 0.003

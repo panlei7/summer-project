@@ -31,10 +31,11 @@ class Plot:
         plt.title(title)
         plt.xlim([0, self.nx_fg])
         plt.ylim([0, self.ny_fg])
+        plt.gca().invert_yaxis()
         plt.colorbar()
 
     def plot_gradient(self, grad):
-        grad_2d = grad.reshape(self.nx_ig, self.ny_ig)
+        grad_2d = grad.reshape(self.ny_ig, self.nx_ig)
         fig = plt.figure()
         self.__plot2d(self.x_ig, self.y_ig, grad_2d, "gradient")
         fig.savefig("gradient.png")
@@ -43,11 +44,11 @@ class Plot:
     def plot_result(self, model_data, model_inv):
         fig = plt.figure(figsize=(12, 4))
         plt.subplot(121)
-        model_data_2d = model_data.reshape(self.nx_fg, self.ny_fg)
+        model_data_2d = model_data.reshape(self.ny_fg, self.nx_fg)
         self.__plot2d(self.x_fg, self.y_fg, model_data_2d, "data model")
         plt.clim(self.vref-self.vmax, self.vref+self.vmax)
         plt.subplot(122)
-        model_inv_2d = model_inv.reshape(self.nx_ig, self.ny_ig)
+        model_inv_2d = model_inv.reshape(self.ny_ig, self.nx_ig)
         self.__plot2d(self.x_ig, self.y_ig, model_inv_2d, "inverted model")
         plt.clim(self.vref-self.vmax, self.vref+self.vmax)
         fig.savefig("model.png")

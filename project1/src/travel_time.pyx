@@ -16,6 +16,5 @@ def travel_time(np.ndarray[DTYPE_t, ndim=2] slowness,
     cdef int N = points_ray.shape[0]
     cdef double ret
     for x in xrange(0, N):
-        a = points_ray[x, :]
-        ret += slowness[points_ray[x,0], points_ray[x,1]]
+        ret += slowness[points_ray[x,1], points_ray[x,0]]
     return ret
